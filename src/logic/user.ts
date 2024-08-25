@@ -29,6 +29,7 @@ export class userLogic {
     // Validamos los datos
     validateUser(username)
     validatePassword(password)
+
     // Creamos el usuario
     const id = crypto.randomUUID()
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
@@ -57,18 +58,22 @@ export class userLogic {
           `select * from users where username = "${username}";`
       )
 
+      // Validamos los datos del usuario en la DB
       const user = query[0]
       if (user === undefined) throw new Error('No se han encontrado datos para este usuario')
       console.log(user)
 
+      // Comparamos el usuario recibido con la DB
       const dbUsername = user.username
       if (dbUsername !== username) throw new Error('Usuario Incorrecto')
 
+      // Comparamos la contraseña recibida con la DB
       const isValid = await bcrypt.compare(password, user.password)
       if (!isValid) throw new Error('Password is invalid')
 
+      // Devolvemos la data publica del usuario como objeto
       const { password: _, date, ...publicUser } = user
-      return publicUser
+      return publicUser as publicUserInfo
     } catch (error) {
       throw new Error('Error al procesar el inicio de sesion')
     }

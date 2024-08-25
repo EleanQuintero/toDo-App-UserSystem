@@ -17,10 +17,8 @@ export interface privateUserInfo {
 }
 
 export interface publicUserInfo {
-  [
-  username: string,
-  password?: string,
-  avatar: string,
-  date?: string
-  ]
+  id: string
+  username: string
+  avatar: string
+
 }
