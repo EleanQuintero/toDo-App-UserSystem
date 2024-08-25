@@ -1,0 +1,37 @@
+{
+  "name": "todo-login-system",
+  "version": "1.0.0",
+  "description": "toDo-login",
+  "main": "index.js",
+  "scripts": {
+    "start": "node build/index.js",
+    "dev": "npx ts-node-dev src/index.ts",
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Eleqful",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "4.17.21",
+    "@types/node": "22.5.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "2.0.0",
+    "ts-standard": "^12.0.2",
+    "typescript": "^5.5.4"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/ts-standard/eslintrc.json"
+    ],
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    }
+  },
+  "dependencies": {
+    "bcrypt": "5.1.1",
+    "express": "4.19.2",
+    "mysql2": "3.11.0",
+    "zod": "3.23.8"
+  }
+}
