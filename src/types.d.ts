@@ -1,3 +1,4 @@
+
 export type username = string
 
 export type password = string
@@ -21,4 +22,13 @@ export interface publicUserInfo {
   username: string
   avatar: string
 
+}
+
+// Extendemos la propiedad "session" al tipo request para crear la sesion
+declare module 'express-serve-static-core' {
+  interface Request {
+    session: {
+      user: string | jwt.JwtPayload // Puedes definir un tipo más específico en lugar de 'any'
+    }
+  }
 }

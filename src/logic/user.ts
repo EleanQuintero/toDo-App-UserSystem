@@ -61,7 +61,6 @@ export class userLogic {
       // Validamos los datos del usuario en la DB
       const user = query[0]
       if (user === undefined) throw new Error('No se han encontrado datos para este usuario')
-      console.log(user)
 
       // Comparamos el usuario recibido con la DB
       const dbUsername = user.username

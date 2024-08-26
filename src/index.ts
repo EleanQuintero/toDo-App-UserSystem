@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express from 'express'
-import { saludo, SECRET_KEY } from './const'
+import { SECRET_KEY } from './const'
 import { userLogic } from './logic/user'
 import jwt from 'jsonwebtoken'
 import { publicUserInfo } from './types'
@@ -17,9 +17,22 @@ app.set('view engine', 'ejs')
 app.use(express.json())
 app.use(cookieParser())
 
-app.get('/', (_, res) => {
-  console.log(saludo)
-  res.render('index.ejs')
+app.use((req, _, next) => {
+  const token = req.cookies.access_token
+  req.session = { user: null }
+
+  try {
+    const data = jwt.verify(token, SECRET_KEY)
+    req.session.user = data
+    console.log(data)
+  } catch { }
+
+  next()
+})
+
+app.get('/', (req, res) => {
+  const { user } = req.session
+  res.render('index.ejs', user)
 })
 
 app.post('/register', async (req, res) => {
@@ -46,7 +59,7 @@ app.post('/login', async (req, res) => {
 
     res
     // Creamos la cookie del usuario
-      .cookie('acces_token', token, {
+      .cookie('access_token', token, {
         httpOnly: true, // La cookie solo se puede acceder en el servidor
         secure: process.env.NODE_ENV === 'production', // la cookie solo se puede acceder en https
         sameSite: 'strict', // la cookie solo se puede acceder desde el mismo dominio
@@ -55,6 +68,16 @@ app.post('/login', async (req, res) => {
       .send({ user })
   } catch (error) {
     res.status(401).send(error)
+  }
+})
+
+app.get('/protected', (req, res) => {
+  const { user } = req.session
+  if (user === null) {
+    console.log(user)
+    return res.status(403).send('Acceso no autorizado')
+  } else {
+    return res.render('protected.ejs', user)
   }
 })
 
