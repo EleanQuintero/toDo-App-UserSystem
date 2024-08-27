@@ -2,27 +2,10 @@
 import { SALT_ROUNDS } from '../const'
 import { password, publicUserInfo, username } from '../types'
 import bcrypt from 'bcrypt'
-import mysql from 'mysql2/promise'
 import crypto from 'node:crypto'
 import { validatePassword, validateUser } from '../schemes/userDataValidation'
 import { RowDataPacket } from 'mysql2'
-
-export const DB_HOST = 'localhost'
-export const DB_USER = 'root'
-export const DB_PASSWORD = ''
-export const DB_PORT = 3306
-export const DB_NAME = 'TodosDB'
-
-const config = {
-  host: DB_HOST,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  port: DB_PORT,
-  database: DB_NAME
-}
-
-// Creamos conexion con DB
-const connection = mysql.createConnection(config)
+import { connection } from './DB_config'
 
 export class userLogic {
   static async create ({ username, password }: { username: username, password: password }): Promise<string> {
