@@ -5,12 +5,12 @@ import { userLogic } from './logic/user'
 import jwt from 'jsonwebtoken'
 import { publicUserInfo } from './types'
 import cookieParser from 'cookie-parser'
-import cors, { CorsOptions } from 'cors'
+import cors from 'cors'
 
-const corsOptions: CorsOptions = {
+/* const corsOptions: CorsOptions = {
   origin: 'https://eleqful-to-do-app.up.railway.app',
   credentials: true
-}
+} */
 const PORT: number | string = process.env.PORT ?? 5241
 
 const app = express()
@@ -18,7 +18,7 @@ const app = express()
 // vista para probar los endpoints
 
 app.set('view engine', 'ejs')
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
 
