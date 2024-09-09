@@ -5,7 +5,12 @@ import { userLogic } from './logic/user'
 import jwt from 'jsonwebtoken'
 import { publicUserInfo } from './types'
 import cookieParser from 'cookie-parser'
+import cors, { CorsOptions } from 'cors'
 
+const corsOptions: CorsOptions = {
+  origin: 'https://eleqful-to-do-app.up.railway.app',
+  credentials: true
+}
 const PORT: number | string = process.env.PORT ?? 5241
 
 const app = express()
@@ -13,7 +18,7 @@ const app = express()
 // vista para probar los endpoints
 
 app.set('view engine', 'ejs')
-
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(cookieParser())
 
@@ -47,6 +52,7 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body
+  const isProduction = process.env.NODE_ENV === 'production'
   try {
     // Obtenemos el usuario confirmado
     const user: publicUserInfo = await userLogic.login({ username, password })
@@ -60,10 +66,11 @@ app.post('/login', async (req, res) => {
     res
     // Creamos la cookie del usuario
       .cookie('access_token', token, {
-        httpOnly: true, // La cookie solo se puede acceder en el servidor
-        secure: process.env.NODE_ENV === 'production', // la cookie solo se puede acceder en https
-        sameSite: 'strict', // la cookie solo se puede acceder desde el mismo dominio
-        maxAge: 1000 * 60 * 60 // el tiempo de duracion de la cookie
+        httpOnly: true,
+        secure: isProduction, // Solo activar secure en producción
+        sameSite: 'none', // SameSite None en producción, Lax para local
+        domain: isProduction ? ':9000' : undefined, // Configurar dominio solo en producción
+        maxAge: 1000 * 60 * 60 // 1 hora
       })
       .send({ user })
   } catch (error) {
