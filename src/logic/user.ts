@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-extraneous-class */
-import { SALT_ROUNDS } from '../const'
 import { password, publicUserInfo, username } from '../types'
 import bcrypt from 'bcrypt'
 import crypto from 'node:crypto'
@@ -9,6 +8,11 @@ import { connection } from './DB_config'
 
 export class userLogic {
   static async create ({ username, password }: { username: username, password: password }): Promise<string> {
+    const SALT_ROUNDS = Number(process.env.SALT_ROUNDS)
+    if (isNaN(SALT_ROUNDS) || SALT_ROUNDS <= 0) {
+      throw new Error('La variable de entorno SALT_ROUNDS debe ser un número positivo.')
+    }
+
     // Validamos los datos
     validateUser(username)
     validatePassword(password)
