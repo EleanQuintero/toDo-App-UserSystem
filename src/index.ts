@@ -7,8 +7,10 @@ import { publicUserInfo } from './types'
 import cookieParser from 'cookie-parser'
 import cors, { CorsOptions } from 'cors'
 
+const CORS_ORIGIN: string = process.env.CORS_ORIGIN ?? 'http://localhost:5173'
+
 const corsOptions: CorsOptions = {
-  origin: 'https://eleqful-to-do-app.up.railway.app',
+  origin: CORS_ORIGIN,
   credentials: true
 }
 const PORT: number | string = process.env.PORT ?? 5241
