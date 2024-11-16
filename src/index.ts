@@ -70,11 +70,10 @@ app.post('/login', async (req, res) => {
       .cookie('access_token', token, {
         httpOnly: true,
         secure: isProduction, // Solo activar secure en producción
-        sameSite: 'none', // SameSite None en producción, Lax para local
-        domain: isProduction ? ':9000' : undefined, // Configurar dominio solo en producción
+        sameSite: 'strict', // SameSite None en producción, Lax para local
         maxAge: 1000 * 60 * 60 // 1 hora
       })
-      .send({ user })
+      .send({ user, token })
   } catch (error) {
     res.status(401).send(error)
   }
