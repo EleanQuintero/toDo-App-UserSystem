@@ -73,7 +73,7 @@ app.post('/login', async (req, res) => {
         sameSite: 'strict', // SameSite None en producción, Lax para local
         maxAge: 1000 * 60 * 60 // 1 hora
       })
-      .send({ user, token })
+      .send({ user })
   } catch (error) {
     res.status(401).send(error)
   }
