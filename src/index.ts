@@ -7,7 +7,7 @@ import { publicUserInfo } from './types'
 import cookieParser from 'cookie-parser'
 import cors, { CorsOptions } from 'cors'
 
-const CORS_ORIGIN: string = process.env.CORS_ORIGIN ?? 'http://localhost:5173'
+const CORS_ORIGIN: string = process.env.CORS_ORIGIN ?? 'http://localhost:3000'
 
 const corsOptions: CorsOptions = {
   origin: CORS_ORIGIN,
@@ -54,7 +54,6 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body
-  const isProduction = process.env.NODE_ENV === 'production'
   try {
     // Obtenemos el usuario confirmado
     const user: publicUserInfo = await userLogic.login({ username, password })
@@ -69,7 +68,7 @@ app.post('/login', async (req, res) => {
     // Creamos la cookie del usuario
       .cookie('access_token', token, {
         httpOnly: true,
-        secure: isProduction, // Solo activar secure en producción
+        secure: process.env.NODE_ENV === 'production', // Solo activar secure en producción
         sameSite: 'strict', // SameSite None en producción, Lax para local
         maxAge: 1000 * 60 * 60 // 1 hora
       })
